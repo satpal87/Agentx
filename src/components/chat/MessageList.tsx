@@ -98,14 +98,12 @@ gr2.query();`,
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    console.log("Messages changed, scrolling to bottom");
+    // Immediate scroll attempt
+    scrollToBottom();
 
-    // Use multiple timeouts to ensure scrolling works after all content is loaded
-    const timeouts = [100, 300, 500, 1000, 2000].map((delay) =>
-      setTimeout(() => {
-        scrollToBottom();
-        console.log(`Scroll attempt after ${delay}ms`);
-      }, delay),
+    // Additional scroll attempts with increasing delays
+    const timeouts = [50, 150, 300, 600].map((delay) =>
+      setTimeout(() => scrollToBottom(), delay),
     );
 
     // Clear all timeouts on cleanup
@@ -123,14 +121,6 @@ gr2.query();`,
         messagesContainerRef.current;
       const isScrolledUp = scrollHeight - scrollTop - clientHeight > 100;
       setShowScrollButton(isScrolledUp);
-
-      console.log("Scroll position checked", {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-        isScrolledUp,
-        difference: scrollHeight - scrollTop - clientHeight,
-      });
     };
 
     const container = messagesContainerRef.current;
@@ -157,35 +147,15 @@ gr2.query();`,
 
   const scrollToBottom = () => {
     try {
-      // First try the direct scrollTop method as it's more reliable
+      // Direct scrollTop method - most reliable
       if (messagesContainerRef.current) {
         const container = messagesContainerRef.current;
         container.scrollTop = container.scrollHeight;
-        console.log("Set scrollTop directly on container", {
-          scrollTop: container.scrollTop,
-          scrollHeight: container.scrollHeight,
-        });
-      } else {
-        console.warn("messagesContainerRef is null, cannot scroll");
       }
 
-      // Then also try scrollIntoView as a backup
+      // Backup method using scrollIntoView
       if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-        console.log("scrollIntoView called on messagesEndRef");
-      } else {
-        console.warn("messagesEndRef is null, cannot scroll");
-      }
-
-      // Force scroll for mobile devices
-      try {
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: "smooth",
-        });
-      } catch (e) {
-        // Fallback for older browsers
-        window.scrollTo(0, document.body.scrollHeight);
+        messagesEndRef.current.scrollIntoView({ behavior: "auto" });
       }
     } catch (error) {
       console.error("Error scrolling to bottom:", error);
@@ -208,11 +178,18 @@ gr2.query();`,
 
   return (
     <div
-      className="flex flex-col h-full overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 w-full touch-auto"
+      className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 w-full"
       ref={messagesContainerRef}
-      style={{ WebkitOverflowScrolling: "touch" }}
+      style={{
+        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: "contain",
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(155, 155, 155, 0.5) transparent",
+        minHeight: 0,
+        height: "100%",
+      }}
     >
-      <div className="flex-grow w-full">
+      <div className="w-full flex-grow" style={{ paddingBottom: "20px" }}>
         {messages.map((message) => (
           <div
             key={message.id}
@@ -317,11 +294,12 @@ gr2.query();`,
       {/* Scroll to bottom button */}
       {showScrollButton && (
         <Button
-          className="fixed bottom-20 right-6 rounded-full shadow-lg p-3 h-10 w-10"
+          className="fixed bottom-24 right-6 rounded-full shadow-lg p-2 h-12 w-12 z-50 bg-primary hover:bg-primary/90"
           onClick={scrollToBottom}
-          variant="secondary"
+          variant="default"
+          aria-label="Scroll to bottom"
         >
-          <ArrowDown size={20} />
+          <ArrowDown size={24} className="text-white" />
         </Button>
       )}
     </div>

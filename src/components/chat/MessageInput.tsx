@@ -93,13 +93,14 @@ const MessageInput = ({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={`Ask about ${queryTypes.find((t) => t.id === queryType)?.label || "ServiceNow"}...`}
-            className="min-h-[100px] pr-12 resize-none"
+            className="min-h-[80px] max-h-[200px] pr-12 resize-none"
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
               }
             }}
+            autoFocus
           />
           <Button
             className="absolute bottom-3 right-3"

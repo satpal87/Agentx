@@ -98,8 +98,16 @@ const Dashboard = ({
 
   return (
     <div
-      className="flex h-screen w-full bg-gray-50 dark:bg-gray-900 overflow-hidden"
-      style={{ height: "100vh", maxHeight: "100vh" }}
+      className="flex h-screen w-full bg-gray-50 dark:bg-gray-900"
+      style={{
+        height: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: "hidden",
+      }}
     >
       {/* Sidebar */}
       <Sidebar
@@ -111,7 +119,10 @@ const Dashboard = ({
       />
 
       {/* Main content area */}
-      <main className="flex-1 flex flex-col overflow-auto">
+      <main
+        className="flex-1 flex flex-col overflow-hidden"
+        style={{ height: "100%", minHeight: 0 }}
+      >
         {/* Email verification banner */}
         {needsEmailVerification && (
           <EmailVerificationBanner

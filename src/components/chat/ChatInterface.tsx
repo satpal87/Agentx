@@ -377,10 +377,24 @@ const ChatInterface = ({
 
   return (
     <div
-      className="flex flex-col h-full w-full bg-white dark:bg-gray-950 overflow-hidden"
-      style={{ height: "100%", maxHeight: "100vh" }}
+      className="flex flex-col h-full w-full bg-white dark:bg-gray-950"
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
     >
-      <Card className="flex flex-col h-full border-0 rounded-none shadow-none">
+      <Card
+        className="flex flex-col h-full border-0 rounded-none shadow-none"
+        style={{
+          flex: "1 1 auto",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          minHeight: 0,
+        }}
+      >
         <CardHeader className="px-4 py-3 border-b flex-shrink-0 flex flex-row items-center justify-between">
           <div className="flex items-center">
             <CardTitle className="text-lg font-medium">
@@ -454,13 +468,22 @@ const ChatInterface = ({
             value="chat"
             className="flex-1 flex flex-col p-0 m-0 data-[state=active]:flex-1"
           >
-            <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+            <CardContent
+              className="flex-1 flex flex-col p-0"
+              style={{
+                flex: "1 1 auto",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+                minHeight: 0,
+              }}
+            >
               <div
-                className="flex-1 overflow-auto touch-auto"
-                ref={messagesContainerRef}
+                className="flex-1 overflow-hidden"
                 style={{
-                  height: "calc(100vh - 220px)",
-                  WebkitOverflowScrolling: "touch",
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 <MessageList messages={messages} onCopyCode={onCopyCode} />
