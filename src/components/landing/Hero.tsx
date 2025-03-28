@@ -21,8 +21,8 @@ export function Hero({ onGetStarted }: HeroProps) {
   };
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-950">
-      <div className="container px-4 md:px-6 mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-950 overflow-x-hidden">
+      <div className="container px-4 md:px-6 mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16 overflow-hidden">
         <div className="flex flex-col items-start space-y-6 lg:w-1/2">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter">
             ServiceNow AI Assistant
@@ -79,8 +79,8 @@ export function Hero({ onGetStarted }: HeroProps) {
           </div>
         </div>
 
-        <div className="lg:w-1/2">
-          <div className="relative rounded-lg overflow-hidden shadow-xl">
+        <div className="lg:w-1/2 w-full mt-8 lg:mt-0">
+          <div className="relative rounded-lg overflow-hidden shadow-xl max-w-full">
             <img
               src="https://images.unsplash.com/photo-1607798748738-b15c40d33d57?w=800&q=80"
               alt="ServiceNow AI Assistant Interface"

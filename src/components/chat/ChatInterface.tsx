@@ -377,12 +377,13 @@ const ChatInterface = ({
 
   return (
     <div
-      className="flex flex-col h-full w-full bg-white dark:bg-gray-950"
+      className="flex flex-col w-full bg-white dark:bg-gray-950"
       style={{
-        height: "100%",
+        height: "100vh",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        position: "relative",
       }}
     >
       <Card
@@ -494,7 +495,7 @@ const ChatInterface = ({
                   <AlertDescription>{openAIError}</AlertDescription>
                 </Alert>
               )}
-              <div className="flex-shrink-0 bg-white border-t border-gray-200">
+              <div className="flex-shrink-0 bg-white border-t border-gray-200 pb-[160px]">
                 <MessageInput
                   onSendMessage={handleSendMessage}
                   isLoading={isLoading}

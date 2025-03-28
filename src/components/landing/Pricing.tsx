@@ -88,7 +88,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
   return (
     <section
       id="pricing"
-      className="py-20 px-4 md:px-6 lg:px-8 bg-white dark:bg-gray-950"
+      className="py-20 px-4 md:px-6 lg:px-8 bg-white dark:bg-gray-950 overflow-x-hidden"
     >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
@@ -101,7 +101,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
           {tiers.map((tier) => (
             <Card
               key={tier.id}

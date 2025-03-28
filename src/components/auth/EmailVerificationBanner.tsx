@@ -7,17 +7,21 @@ import { AlertCircle, Mail, Loader2, X } from "lucide-react";
 interface EmailVerificationBannerProps {
   email: string;
   className?: string;
+  onDismiss?: () => void;
 }
 
 export function EmailVerificationBanner({
   email,
   className,
+  onDismiss = () => {},
 }: EmailVerificationBannerProps) {
   const { resendVerificationEmail } = useAuth();
   const [isResending, setIsResending] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
   const [resendError, setResendError] = useState<string | null>(null);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => {
+    return localStorage.getItem("emailBannerDismissed") === "true";
+  });
 
   const handleResendEmail = async () => {
     if (isResending) return;
@@ -92,7 +96,11 @@ export function EmailVerificationBanner({
         variant="ghost"
         size="icon"
         className="absolute top-2 right-2 h-6 w-6 p-0 text-yellow-600 hover:text-yellow-800 hover:bg-yellow-100 dark:text-yellow-400 dark:hover:text-yellow-200 dark:hover:bg-yellow-900/30"
-        onClick={() => setDismissed(true)}
+        onClick={() => {
+          setDismissed(true);
+          localStorage.setItem("emailBannerDismissed", "true");
+          onDismiss();
+        }}
       >
         <X size={14} />
         <span className="sr-only">Dismiss</span>

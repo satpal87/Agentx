@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import {
@@ -23,6 +23,24 @@ const MessageInput = ({
 }: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const [queryType, setQueryType] = useState("general");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    return localStorage.getItem("sidebarCollapsed") === "true";
+  });
+
+  // Listen for sidebar collapse state changes
+  useEffect(() => {
+    const checkSidebarState = () => {
+      const currentState = localStorage.getItem("sidebarCollapsed") === "true";
+      if (currentState !== sidebarCollapsed) {
+        setSidebarCollapsed(currentState);
+      }
+    };
+
+    // Check initially and then periodically
+    const intervalId = setInterval(checkSidebarState, 500);
+
+    return () => clearInterval(intervalId);
+  }, [sidebarCollapsed]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +66,14 @@ const MessageInput = ({
   ];
 
   return (
-    <div className="p-4 border-t border-gray-200 bg-white w-full">
+    <div
+      className="p-4 border-t border-gray-200 bg-white w-full fixed bottom-0 z-10"
+      style={{
+        left: sidebarCollapsed ? "60px" : "280px",
+        right: "0",
+        transition: "left 0.3s ease-in-out",
+      }}
+    >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-wrap items-center space-x-2 mb-2">
           <TooltipProvider>

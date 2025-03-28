@@ -30,7 +30,7 @@ const Navbar = ({ onLogin = () => {}, onSignUp = () => {} }: NavbarProps) => {
 
   return (
     <nav className="w-full h-20 px-4 md:px-8 lg:px-12 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 fixed top-0 left-0 right-0 z-50">
-      <div className="h-full max-w-7xl mx-auto flex items-center justify-between">
+      <div className="h-full max-w-7xl mx-auto flex items-center justify-between overflow-x-hidden">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center">
@@ -44,7 +44,7 @@ const Navbar = ({ onLogin = () => {}, onSignUp = () => {} }: NavbarProps) => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -57,7 +57,7 @@ const Navbar = ({ onLogin = () => {}, onSignUp = () => {} }: NavbarProps) => {
         </div>
 
         {/* Authentication Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-2 md:space-x-4">
           {user ? (
             <div className="flex items-center space-x-3">
               <Button variant="ghost" size="sm" onClick={() => navigate("/")}>

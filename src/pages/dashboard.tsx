@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Routes, Route } from "react-router-dom";
-import Sidebar from "../components/dashboard/Sidebar";
+import CollapsibleSidebar from "../components/dashboard/CollapsibleSidebar";
 import ChatInterface from "../components/chat/ChatInterface";
 import ChatHistory from "../components/chat/ChatHistory";
 import ProfileSettings from "../components/settings/ProfileSettings";
@@ -44,6 +44,12 @@ const Dashboard = ({
   const { user, logout, useMockAuth } = useAuth();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(activePage);
+  const [needsEmailVerification, setNeedsEmailVerification] = useState(
+    user &&
+      !user.email_confirmed_at &&
+      !useMockAuth &&
+      localStorage.getItem("emailBannerDismissed") !== "true",
+  );
 
   useEffect(() => {
     if (!user) {
@@ -86,10 +92,6 @@ const Dashboard = ({
     });
   };
 
-  // Check if user needs to verify email
-  const needsEmailVerification =
-    user && !user.email_confirmed_at && !useMockAuth;
-
   // Define navigation items for ServiceNow
   const servicenowNavItems = [
     { name: "Settings", path: "/chat/settings/servicenow" },
@@ -98,19 +100,17 @@ const Dashboard = ({
 
   return (
     <div
-      className="flex h-screen w-full bg-gray-50 dark:bg-gray-900"
+      className="flex w-full bg-gray-50 dark:bg-gray-900"
       style={{
-        height: "100vh",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        minHeight: "100vh",
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
         overflow: "hidden",
       }}
     >
-      {/* Sidebar */}
-      <Sidebar
+      {/* Collapsible Sidebar */}
+      <CollapsibleSidebar
         userName={userName}
         userEmail={userEmail}
         userAvatar={userAvatar}
@@ -120,14 +120,20 @@ const Dashboard = ({
 
       {/* Main content area */}
       <main
-        className="flex-1 flex flex-col overflow-hidden"
-        style={{ height: "100%", minHeight: 0 }}
+        className="flex-1 flex flex-col overflow-auto"
+        style={{ height: "100vh", overflowY: "auto" }}
       >
         {/* Email verification banner */}
         {needsEmailVerification && (
           <EmailVerificationBanner
             email={userEmail}
             className="sticky top-0 z-10"
+            onDismiss={() => {
+              // In a real app, you might want to store this preference
+              localStorage.setItem("emailBannerDismissed", "true");
+              // Force a re-render
+              setNeedsEmailVerification(false);
+            }}
           />
         )}
 

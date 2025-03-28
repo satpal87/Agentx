@@ -133,12 +133,12 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 overflow-x-hidden">
       {/* Navigation */}
       <Navbar onLogin={handleOpenLogin} onSignUp={handleOpenSignUp} />
 
       {/* Main content */}
-      <main className="flex-grow mt-20">
+      <main className="flex-grow mt-20 overflow-x-hidden">
         {/* Hero section */}
         <Hero />
 

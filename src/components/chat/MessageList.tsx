@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Copy, Check, Code, ArrowDown } from "lucide-react";
+import { Copy, Check, Code, ArrowDown, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -95,6 +95,9 @@ gr2.query();`,
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [copiedCodes, setCopiedCodes] = useState<Record<string, boolean>>({});
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    return localStorage.getItem("sidebarCollapsed") === "true";
+  });
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -145,6 +148,21 @@ gr2.query();`,
     }
   }, []);
 
+  // Listen for sidebar collapse state changes
+  useEffect(() => {
+    const checkSidebarState = () => {
+      const currentState = localStorage.getItem("sidebarCollapsed") === "true";
+      if (currentState !== sidebarCollapsed) {
+        setSidebarCollapsed(currentState);
+      }
+    };
+
+    // Check initially and then periodically
+    const intervalId = setInterval(checkSidebarState, 500);
+
+    return () => clearInterval(intervalId);
+  }, [sidebarCollapsed]);
+
   const scrollToBottom = () => {
     try {
       // Direct scrollTop method - most reliable
@@ -178,7 +196,7 @@ gr2.query();`,
 
   return (
     <div
-      className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 w-full"
+      className="flex-1 overflow-y-auto p-4 w-full momentum-scroll pb-[160px]"
       ref={messagesContainerRef}
       style={{
         WebkitOverflowScrolling: "touch",
@@ -187,9 +205,17 @@ gr2.query();`,
         scrollbarColor: "rgba(155, 155, 155, 0.5) transparent",
         minHeight: 0,
         height: "100%",
+        maxHeight: "calc(100vh - 100px)",
+        marginLeft: sidebarCollapsed ? "60px" : "280px",
+        transition: "margin-left 0.3s ease-in-out",
+        width: `calc(100% - ${sidebarCollapsed ? "60px" : "280px"})`,
+        background: "white",
       }}
     >
-      <div className="w-full flex-grow" style={{ paddingBottom: "20px" }}>
+      <div
+        className="w-full max-w-4xl mx-auto flex-grow"
+        style={{ paddingBottom: "20px" }}
+      >
         {messages.map((message) => (
           <div
             key={message.id}
@@ -212,10 +238,10 @@ gr2.query();`,
 
             <div
               className={cn(
-                "flex flex-col p-4 rounded-lg",
+                "flex flex-col p-4 rounded-lg shadow-sm",
                 message.sender === "user"
                   ? "bg-primary text-primary-foreground"
-                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+                  : "bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
               )}
             >
               <div className="flex justify-between items-start mb-1">

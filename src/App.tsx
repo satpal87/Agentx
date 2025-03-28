@@ -49,12 +49,12 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex items-center justify-center min-h-screen">
           <p>Loading app...</p>
         </div>
       }
     >
-      <>
+      <div className="flex flex-col min-h-screen">
         <Routes>
           {/* Home route - accessible to all users */}
           <Route path="/" element={<Home />} />
@@ -82,7 +82,7 @@ function App() {
 
         {/* Toast notifications */}
         <Toaster />
-      </>
+      </div>
     </Suspense>
   );
 }

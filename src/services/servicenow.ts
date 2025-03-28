@@ -92,13 +92,14 @@ export class ServiceNowAPI {
 
       // Test the basic auth with a simple request
       console.log("Testing authentication with a simple request...");
-      const testUrl = `${this.baseUrl}api/now/v2/table/sys_user?sysparm_limit=1`;
+      const testUrl = `${this.baseUrl}api/now/table/sys_user?sysparm_limit=1`;
       console.log(`Test request URL: ${testUrl}`);
 
       const testResponse = await fetch(testUrl, {
         method: "GET",
         headers: {
           Accept: "application/json",
+          Content-Type: "application/json",
           Authorization: `Basic ${this.accessToken}`,
         },
       });
